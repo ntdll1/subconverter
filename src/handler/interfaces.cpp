@@ -1301,13 +1301,13 @@ int simpleGenerator()
     //std::cerr<<"\nReading generator configuration...\n";
     writeLog(0, "Reading generator configuration...", LOG_LEVEL_INFO);
 #ifdef _WIN32
-    char *input = "conIN$";
-    char *output = "conOUT$";
+    char *inpath = "conIN$";
+    char *outpath = "conOUT$";
 #else
-    char *input = "/dev/stdin";
-    char *output = "/dev/stdout";
+    char *inpath = "/dev/stdin";
+    char *outpath = "/dev/stdout";
 #endif
-    std::string config = fileGet(input), path, profile, arguments, content;
+    std::string config = fileGet(inpath), path, profile, arguments, content;
     if(config.empty())
     {
         //std::cerr<<"Generator configuration not found or empty!\n";

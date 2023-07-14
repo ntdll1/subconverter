@@ -1300,7 +1300,14 @@ int simpleGenerator()
 {
     //std::cerr<<"\nReading generator configuration...\n";
     writeLog(0, "Reading generator configuration...", LOG_LEVEL_INFO);
-    std::string config = fileGet("generate.ini"), path, profile, arguments, content;
+#ifdef _WIN32
+    char *input = "conIN$";
+    char *output = "conOUT$";
+#else
+    char *input = "/dev/stdin";
+    char *output = "/dev/stdout";
+#endif
+    std::string config = fileGet(input), path, profile, arguments, content;
     if(config.empty())
     {
         //std::cerr<<"Generator configuration not found or empty!\n";
@@ -1358,9 +1365,7 @@ int simpleGenerator()
             path = ini.Get("path");
         else
         {
-            //std::cerr<<"Artifact '"<<x<<"' output path missing! Skipping...\n\n";
-            writeLog(0, "Artifact '" + x + "' output path missing! Skipping...\n", LOG_LEVEL_ERROR);
-            continue;
+            path = outpath;
         }
         if(ini.ItemExist("profile"))
         {

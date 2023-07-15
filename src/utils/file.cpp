@@ -30,11 +30,13 @@ std::string fileGet(const std::string &path, bool scope_limit)
 
     std::stringstream sstream;
     std::ifstream infile;
-    infile.open(path, std::ios::binary);
+    std::string line;
+    infile.open(path);
     if(infile)
     {
-        sstream<<infile.rdbuf();
-        infile.close();
+        while (std::getline(infile, line)) {
+            sstream << line << endl;
+        }
         content = sstream.str();
     }
     return content;

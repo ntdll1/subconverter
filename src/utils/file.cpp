@@ -7,9 +7,13 @@
 bool isInScope(const std::string &path)
 {
 #ifdef _WIN32
+    if(path == "conIN$")
+        return true;
     if(path.find(":\\") != path.npos || path.find("..") != path.npos)
         return false;
 #else
+    if(path == "/dev/stdin")
+        return true;
     if(startsWith(path, "/") || path.find("..") != path.npos)
         return false;
 #endif // _WIN32

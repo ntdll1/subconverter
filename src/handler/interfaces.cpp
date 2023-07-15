@@ -1300,14 +1300,9 @@ int simpleGenerator()
 {
     //std::cerr<<"\nReading generator configuration...\n";
     writeLog(0, "Reading generator configuration...", LOG_LEVEL_INFO);
-#ifdef _WIN32
-    char *outpath = "conOUT$";
-#else
-    char *outpath = "/dev/stdout";
-#endif
     std::stringstream buffer;
     buffer << std::cin.rdbuf();
-    std::string config = buffer.str(), path, profile, arguments, content;
+    std::string config = buffer.str(), profile, arguments, content;
     if(config.empty())
     {
         //std::cerr<<"Generator configuration not found or empty!\n";
@@ -1361,12 +1356,6 @@ int simpleGenerator()
         //std::cerr<<"Generating artifact '"<<x<<"'...\n";
         writeLog(0, "Generating artifact '" + x + "'...", LOG_LEVEL_INFO);
         ini.EnterSection(x);
-        if(ini.ItemExist("path"))
-            path = ini.Get("path");
-        else
-        {
-            path = outpath;
-        }
         if(ini.ItemExist("profile"))
         {
             profile = ini.Get("profile");
@@ -1387,7 +1376,7 @@ int simpleGenerator()
                         return -1;
                 }
                 // add UTF-8 BOM
-                fileWrite(path, "\xEF\xBB\xBF" + content, true);
+                std::cout << "\xEF\xBB\xBF" + content;
                 continue;
             }
             ini.GetItems(allItems);
@@ -1410,7 +1399,7 @@ int simpleGenerator()
                 return -1;
             continue;
         }
-        fileWrite(path, content, true);
+        std::cout << content;
         auto iter = std::find_if(response.headers.begin(), response.headers.end(), [](auto y){ return y.first == "Subscription-UserInfo"; });
         if(iter != response.headers.end())
             writeLog(0, "User Info for artifact '" + x + "': " + subInfoToMessage(iter->second), LOG_LEVEL_INFO);

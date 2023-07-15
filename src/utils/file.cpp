@@ -35,7 +35,7 @@ std::string fileGet(const std::string &path, bool scope_limit)
     if(infile)
     {
         while (std::getline(infile, line)) {
-            sstream << line << endl;
+            sstream << line << std::endl;
         }
         content = sstream.str();
     }
